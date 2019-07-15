@@ -7,6 +7,10 @@ a {
   color: #00B7FF;
 }
 
+.menu-versao{
+	margin-bottom: 20px;
+}
+
 .texto{
 	color: #1d1c1c;
     font-size: 34px;
@@ -43,6 +47,8 @@ a {
 }
 
 #chapter{
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .chapterSelect{
@@ -52,10 +58,14 @@ a {
     padding-left: 22px;
     /* padding-right: 22px; */
     border-radius: 2px;
-    width: 62px;
+    width: 55px;
     float: left;
     cursor: pointer;
 
+}
+
+.chapterSelected{
+	background-color: #d8d8d8;
 }
 
 .form-control{

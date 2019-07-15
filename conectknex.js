@@ -6,9 +6,9 @@
 var knex = require('knex')({
   client: 'mysql',
   connection: {
-    host : 'mysql898.umbler.com',
-    user : 'slidebible',
-    password : 'slidebible1234',
+    host : 'localhost',
+    user : 'root',
+    password : '',
     database : 'slidebible'
   },
   migrations: {
