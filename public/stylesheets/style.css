@@ -47,7 +47,7 @@ a {
 }
 
 #chapter{
-	margin-top: 20px;
+	
 	margin-bottom: 20px;
 }
 
@@ -76,13 +76,12 @@ a {
 	align-items: center;
 }
 
-@media (max-width: 320px){
-    #container{
-    	font-size: 33px;
-    	background-color: red;
-    	width: 98%;
+@media (max-width: 1020px){
+   
+    .botoes{
+    	margin-top: 10px;
     }
-    input{
-    	height: 80px;
+    .btMobile{
+    	display: none !important;
     }
 }
