@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Cookie|Lato:700i&display=swap" rel="stylesheet">
+  </head>
+  <body>
+
+  	<div id="container">
+  		<div class="formumario">
+  			<form action="/busca" method="post" id="busca">
+  				<div class="form-group row">
+				  <div class="col-md-6 row">
+				  	<div class="col-md-4"><input type="checkbox" name="version" value="aa" checked>Nova Almeida tualizada(NAA)</div>
+				  	<div class="col-md-4"><input type="checkbox" name="version" value="nvi">Nova versão internacional(NVI)</div>
+				  	<div class="col-md-4"><input type="checkbox" name="version" value="acf">Almeida corrigida fiel(ACF)</div>
+				  	
+	  				<select class="form-control" name="book" id="book" required="">
+					  	<% books.forEach(function(books) { %>
+					        <option value=<%= books.id%>=<%= books.qtd_chapter%>><%= books.name %></option>
+					    <% }); %>
+					  
+					</select>
+                    <input type="text" name="vers1" class="form-control" placeholder="Versiculo inicial" required="Insira o numero do versiculo inical">
+  				 	<input type="text" name="vers2" class="form-control" placeholder="Versiculo final" required="Insira o valor do último versiculo">
+  				 	<input type="hidden" name="cap" id="cap" class="form-control" required="Selecione um capítulo">
+
+				  </div>
+				 
+  				  <div class="col-md-6">
+
+	  				  <div id="chapter">
+						  
+					   </div>
+  				 </div>
+  				
+  				</div>
+  				<div class="col-md-6">
+	  				<button type="submit" class=" btn btn-primary">Buscar</button>
+	  			</div>
+  			</form>
+  		</div>
+  		<div id="resultadoBusca">
+		    <h1><%= vers[1].name %></h1>
+		    <p id="nCap">Capítulo <%= vers[1].chapter %></p>
+
+		      <% vers.forEach(function(vers) { %>
+		        <p id=<%= vers.id %>><%= vers.verse %> - <%= vers.text %></p>
+		    <% }); %>
+		</div>
+	</div>
+    <div id="monitor">
+       <video autoplay= loop muted id="videobg">
+       	   <source src="/video/cloud.mp4" type="video/mp4">
+       </video>
+       <div class="col-md-8 offset-md-2 texto">
+       	  <h2></h2>
+	      <p></p>
+       	  <div id="versiculo"></div>
+       </div>
+
+    </div>
+  </body>
+</html>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script>
+      
+       
+       $(document).ready(function() {
+
+             function valorSplit(valor){
+	            var query = valor;
+				var partes = query.split('&');
+				var data = {};
+
+				partes.forEach(function (parte) {
+				    var chaveValor = parte.split('=');
+				    var chave = chaveValor[0];
+				    var valor = chaveValor[1];
+				    data[chave] = valor;
+			    });
+			    return data;
+             }
+
+            //pegar valor da url
+			var monitor=valorSplit(location.search.slice(1));
+
+            // define se é monitor ou não
+            if(monitor.monitor == 1 ){
+            	$("#container").hide();
+            	$("#monitor").show();
+            }else{
+            	$("#monitor").hide();
+            	$("#container").show();
+
+            } 
+          
+         //mostra a qtd dos captulos do livro escolhido   
+		$("select").change(function(){
+           
+			var optionVal= $(this).val();
+			var optionQtd = optionVal.split('=');
+				    var idLivro = optionQtd[0];
+				    var qtdChapter = parseInt(optionQtd[1]) + 1;
+				  
+			$("#chapter").children().remove();	    
+		    var i=1;
+			while(i < qtdChapter){
+				//alert(i);
+				$("#chapter").append('<div class="chapterSelect">'+i+'</div>');
+				i++;
+			}
+
+				//seta o campo do input de capitulos
+		    $(".chapterSelect").click(function(){
+		    	// alert($(this).text());
+		    	 $(".chapterSelect").css("background-color"," whitesmoke")
+		    	 $(this).css("background-color","#d8d8d8")
+	             $('#cap').val($(this).text());
+	            
+		    });
+		});
+	    
+	     
+
+    	
+	      // função do socket
+	      $(function () {
+	        var socket = io();
+	        $('p').click(function(){
+	        	 
+	         socket.emit('text message',$(this).text(), $("#nCap").text(), $("#resultadoBusca h1").text());
+	         //socket.emit('capitulo',$("#nCap").text());
+	        
+	          return false;
+
+	        });
+	        socket.on('text message', function(msg,cap,livro){
+	          //$('#messages').val('');
+	          $('#versiculo').text(msg);
+	          $('#monitor p').text(cap);
+	          $('#monitor h2').text(livro);
+
+	        }); 
+
+	        
+	      });
+        
+     });
+    </script>
