@@ -6,6 +6,20 @@
 var knex = require('knex')({
   client: 'mysql',
   connection: {
+    host : 'mysql898.umbler.com',
+    user : 'slidebible',
+    password : 'slidebible1234',
+    database : 'slidebible'
+  },
+  migrations: {
+    tableName: 'migrations'
+  }
+});
+
+/*
+var knex = require('knex')({
+  client: 'mysql',
+  connection: {
     host : 'localhost',
     user : 'root',
     password : '',
@@ -15,5 +29,6 @@ var knex = require('knex')({
     tableName: 'migrations'
   }
 });
+*/
 // export the initialized knex object
 module.exports = knex;
