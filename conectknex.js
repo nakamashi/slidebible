@@ -3,6 +3,7 @@
 
 // initialize knex with the configuration for the environment
 //var knex = require('knex')(knexConfig);
+
 var knex = require('knex')({
   client: 'mysql',
   connection: {
@@ -30,5 +31,6 @@ var knex = require('knex')({
   }
 });
 */
+
 // export the initialized knex object
 module.exports = knex;

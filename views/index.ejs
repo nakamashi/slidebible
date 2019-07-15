@@ -3,8 +3,9 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Cookie|Lato:700i&display=swap" rel="stylesheet">
+    
   </head>
   <body>
 
@@ -38,6 +39,8 @@
   				
 	  				<div class="">
 		  				<button type="submit" id="botaoBuscar" class=" btn btn-primary" disabled="disabled">Buscar</button>
+		  				<a href="/?monitor=1" class="btn btn-primary" target="_blank">Monitor</a>
+		  				<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modalPainel">Painel mobile</button>
 		  			</div>
   				</div>
   			</form>
@@ -52,22 +55,35 @@
 		</div>
 	</div>
     <div id="monitor">
-       <video autoplay= loop muted id="videobg">
-       	   <source src="/video/cloud.mp4" type="video/mp4">
-       </video>
+      <video autoplay= loop muted id="videobg">
+       	<source src="/video/cloud.mp4" type="video/mp4">
+      </video>
        <div class="col-md-8 offset-md-2 texto">
-       	  <h2></h2>
-	      <p></p>
-       	  <div id="versiculo"></div>
+       	 <h2></h2>
+	     <p></p>
+       	 <div id="versiculo"></div>
        </div>
-
     </div>
+    
+    <!-- Modal -->
+
+	<div class="modal fade modalPainel" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content">
+	      <img src="images/painel.png">
+	    </div>
+	  </div>
+	</div>
+
+
   </body>
 </html>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
     <script>
       
        
@@ -127,8 +143,11 @@
 		    });
 		});
 	    
-	     
-             
+	    //modal
+	   $('#modalPainel').on('shown.bs.modal', function () {
+		  $('#modalPainel').trigger('focus')
+		})
+		             
     	
 	      // função do socket
 	      $(function () {

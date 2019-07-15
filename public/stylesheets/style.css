@@ -71,3 +71,17 @@ a {
 .form-control{
 	margin-bottom: 10px;
 }
+
+.modal{
+	align-items: center;
+}
+
+@media (max-width: 600px){
+    #container{
+    	font-size: 33px;
+    	background-color: red;
+    }
+    input{
+    	height: 80px;
+    }
+}
