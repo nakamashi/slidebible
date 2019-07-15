@@ -76,10 +76,11 @@ a {
 	align-items: center;
 }
 
-@media (max-width: 600px){
+@media (max-width: 320px){
     #container{
     	font-size: 33px;
     	background-color: red;
+    	width: 98%;
     }
     input{
     	height: 80px;
