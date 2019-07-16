@@ -44,15 +44,6 @@ a {
   bottom: 0;
   min-width: 100%; 
   min-height: 100%;
-  z-index: -1;
-}
-
-#logo{
-	z-index: 1;
-	text-align: center;
-    margin-top: 10%;
-    padding: 24px;
-	
 }
 
 #chapter{
