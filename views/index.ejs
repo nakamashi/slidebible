@@ -5,6 +5,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Cookie|Lato:700i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <meta name="viewport" content="width=device-width">
   </head>
   <body>
@@ -163,9 +164,9 @@
 	        });
 	        socket.on('text message', function(msg,cap,livro){
 	          //$('#messages').val('');
-	          $('#versiculo').text(msg);
-	          $('#monitor p').text(cap);
-	          $('#monitor h2').text(livro);
+	          $('#versiculo').html("<span class='wow animated fadeIn'>"+msg+"</span>");
+	          $('#monitor p').html("<span class='wow animated fadeIn'>"+cap+"</span>");
+	          $('#monitor h2').html("<span class='wow animated fadeIn'>"+livro+"</span>");
 
 	        }); 
 
