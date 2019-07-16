@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/stylesheets/animate.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Cookie|Lato:700i&display=swap" rel="stylesheet">
+   
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+
+  	<div id="container">
+  		<div class="formumario">
+  			<form action="/busca" method="post" id="busca">
+  				<div class="form-group row">
+				    <div class="col-lg-12 col-xl-6 row">
+					  	<div class="menu-versao row">
+						  	<div class="col-md-4"><input type="radio" name="version" value="aa" checked>Nova Almeida tualizada(NAA)</div>
+						  	<div class="col-md-4"><input type="radio" name="version" value="nvi">Nova versão internacional(NVI)</div>
+						  	<div class="col-md-4"><input type="radio" name="version" value="acf">Almeida corrigida fiel(ACF)</div>
+						</div>
+					  	
+		  				<select class="form-control" name="book" id="book" required="">
+						  	   <option selected>Selecione o Livro</option>
+						  	<% books.forEach(function(books) { %>
+						        <option value=<%= books.id%>=<%= books.qtd_chapter%>><%= books.name %></option>
+						    <% }); %>
+						  
+						</select>
+	                    <input type="number" name="vers1" class="form-control" placeholder="Versiculo inicial" required="Insira o numero do versiculo inical">
+	  				 	<input type="number" name="vers2" class="form-control" placeholder="Versiculo final" required="Insira o valor do último versiculo">
+	  				 	<input type="hidden" name="cap" id="cap" class="form-control" required="Selecione um capítulo">
+
+				    </div>
+	  			   <div class="col-lg-12 col-xl-6">
+                      <span>CAPÍTULOS</span>
+	  			   	  <div  id="chapter"></div>
+	  				</div>
+  				
+	  				<div class="botoes">
+		  				<button type="submit" id="botaoBuscar" class=" btn btn-primary" disabled="disabled">Buscar</button>
+		  				<a href="/?monitor=1" class="btn btn-primary btMobile" target="_blank">Abrir Monitor</a>
+		  				<button type="button" class="btn btn-primary btMobile" data-toggle="modal" data-target=".modalPainel">Painel mobile</button>
+		  			</div>
+  				</div>
+  			</form>
+  		</div>
+  		<div id="resultadoBusca">
+		    <h1><%= vers[1].name %></h1>
+		    <p id="nCap">Capítulo <%= vers[1].chapter %></p>
+
+		      <% vers.forEach(function(vers) { %>
+		        <p id=<%= vers.id %>><%= vers.verse %> - <%= vers.text %></p>
+		    <% }); %>
+		</div>
+	</div>
+    <div id="monitor">
+      <video autoplay= loop muted id="videobg">
+       	<source src="/video/cloud.mp4" type="video/mp4">
+      </video>
+       
+       <div class="col-md-8 offset-md-2 texto">
+       	 <h2></h2>
+	     <p></p>
+       	 <div id="versiculo"></div>
+       </div>
+    </div>
+    
+    <!-- Modal -->
+
+	<div class="modal fade modalPainel" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content">
+	      <img src="images/painel.png">
+	    </div>
+	  </div>
+	</div>
+
+
+  </body>
+</html>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <script>
+      
+       
+       $(document).ready(function() {
+      
+
+             function valorSplit(valor){
+	            var query = valor;
+				var partes = query.split('&');
+				var data = {};
+
+				partes.forEach(function (parte) {
+				    var chaveValor = parte.split('=');
+				    var chave = chaveValor[0];
+				    var valor = chaveValor[1];
+				    data[chave] = valor;
+			    });
+			    return data;
+             }
+
+            //pegar valor da url
+			var monitor=valorSplit(location.search.slice(1));
+
+            // define se é monitor ou não
+            if(monitor.monitor == 1 ){
+            	$("#container").hide();
+            	$("#monitor").show();
+            }else{
+            	$("#monitor").hide();
+            	$("#container").show();
+
+            } 
+          
+            
+            
+         //mostra a qtd dos captulos do livro escolhido   
+		$("select").change(function(){
+           
+			var optionVal= $(this).val();
+			var optionQtd = optionVal.split('=');
+				    var idLivro = optionQtd[0];
+				    var qtdChapter = parseInt(optionQtd[1]) + 1;
+				  
+			$("#chapter").children().remove();	    
+		    var i=1;
+			while(i < qtdChapter){
+				//alert(i);
+				$("#chapter").append('<div class="chapterSelect">'+i+'</div>');
+				i++;
+			}
+
+				//seta o campo do input de capitulos
+		    $(".chapterSelect").click(function(){
+		    	// alert($(this).text());
+		    	 $(".chapterSelect").removeClass("chapterSelected");
+		    	 $(this).addClass("chapterSelected");
+	             $('#cap').val($(this).text());
+	             $('#botaoBuscar').removeAttr("disabled")
+	            
+		    });
+		});
+	    
+	    //modal
+	   $('#modalPainel').on('shown.bs.modal', function () {
+		  $('#modalPainel').trigger('focus')
+		})
+		             
+    	
+	      // função do socket
+	      $(function () {
+	        var socket = io();
+	        $('p').click(function(){
+	        	 
+	         socket.emit('text message',$(this).text(), $("#nCap").text(), $("#resultadoBusca h1").text());
+	         //socket.emit('capitulo',$("#nCap").text());
+	          return false;
+
+	        });
+	        socket.on('text message', function(msg,cap,livro){
+	          //$('#messages').val('');
+	          $('#monitor h2').text("<span class='wow animated fadeIn'>"+livro+"</span>");
+	          $('#monitor p').text("<span class='wow animated fadeIn'>"+cap+"</span");
+	          $('#versiculo').html("<span class='wow animated fadeIn'>"+msg+"</span>");
+
+	        }); 
+
+	        
+	      });
+        
+     });
+    </script>
