@@ -3,7 +3,7 @@
 
 // initialize knex with the configuration for the environment
 //var knex = require('knex')(knexConfig);
-
+/*
 var knex = require('knex')({
   client: 'mysql',
   connection: {
@@ -17,8 +17,8 @@ var knex = require('knex')({
   }
 });
 
-
-var knexdev = require('knex')({
+*/
+var knex = require('knex')({
   client: 'mysql',
   connection: {
     host : 'localhost',

@@ -18,7 +18,7 @@ module.exports = class Versiculos{
 		return knex.select("verses.id","verses.version", "verses.chapter","verses.verse","verses.text","books.name").from('verses')
 		.leftJoin('books', 'books.id', 'verses.book_id')
 		.whereBetween('verse', [nVers1, nVers2])
-		.where({book_id:book, chapter: nCap, version:"aa"})
+		.where({book_id:book, chapter: nCap})
 		
 	}
 
