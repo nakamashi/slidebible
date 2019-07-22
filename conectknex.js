@@ -17,7 +17,7 @@ var knex = require('knex')({
   }
 });
 
-/*
+
 var knexdev = require('knex')({
   client: 'mysql',
   connection: {
@@ -31,8 +31,6 @@ var knexdev = require('knex')({
   }
 });
 
-*/
-
 
 // export the initialized knex object
-module.exports = knexdev;
+module.exports = knex;
