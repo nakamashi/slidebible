@@ -97,6 +97,10 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
     io.emit('text message', msg,cap,livro);
   });
+
+  socket.on('standby', function(){
+    io.emit('standby');
+  });
  
   
 

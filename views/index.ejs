@@ -41,6 +41,7 @@
   				
 	  				<div class="botoes">
 		  				<button type="submit" id="botaoBuscar" class=" btn btn-primary" disabled="disabled">Buscar</button>
+		  				<button type="button" id="standby" class="btn btn-primary">StandBy</button>
 		  				<a href="/?monitor=1" class="btn btn-primary btMobile" target="_blank">Monitor</a>
 		  				<button type="button" class="btn btn-primary btMobile" data-toggle="modal" data-target=".modalPainel">Painel mobile</button>
 		  			</div>
@@ -118,6 +119,8 @@
 
             } 
           
+
+
          //mostra a qtd dos captulos do livro escolhido   
 		$("select").change(function(){
            
@@ -162,6 +165,13 @@
 	          return false;
 
 	        });
+
+            $("#standby").click(function(){
+            	socket.emit('standby');
+            	return false;
+
+            });
+
 	        socket.on('text message', function(msg,cap,livro){
 	          //$('#messages').val('');
 	          $('#versiculo').html("<span class='wow animated fadeIn'>"+msg+"</span>");
@@ -171,6 +181,23 @@
 	        }); 
 
 	        
+            socket.on('standby', function(){
+	          //$('#messages').val('');
+            	console.log("standby clicado");
+	          $('#versiculo').toggleClass("standby");
+	          var sb= $("#versiculo").hasClass("standby");
+	          if(sb == true){
+	          	$(".texto").css("background-color", "#ffffff00");
+	          	$("#standby").removeClass("btn-primary");
+	          	$("#standby").addClass("btn-success");
+
+	          }else{
+	          	$(".texto").css("background-color", "rgba(255, 255, 255, 0.30)");
+	          	$("#standby").removeClass("btn-success");
+	          	$("#standby").addClass("btn-primary");
+	          }
+	        }); 
+
 	      });
         
      });
