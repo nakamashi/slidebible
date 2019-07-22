@@ -76,6 +76,10 @@ a {
 	align-items: center;
 }
 
+.versSelected{
+  background-color:#e9ecef;
+}
+
 @media (max-width: 1020px){
    
     .botoes{

@@ -51,10 +51,11 @@
   		<div id="resultadoBusca">
 		    <h1><%= vers[1].name %></h1>
 		    <p id="nCap">Capítulo <%= vers[1].chapter %></p>
-
+            <div id="resultadoVers">
 		      <% vers.forEach(function(vers) { %>
 		        <p id=<%= vers.id %>><%= vers.verse %> - <%= vers.text %></p>
 		    <% }); %>
+		    </div>
 		</div>
 	</div>
     <div id="monitor">
@@ -162,6 +163,26 @@
 		    });
 		});
 	     
+        //versiculos selecionados
+        $("#resultadoVers p").click(function(){
+        	$("#resultadoVers p").removeClass("versSelected");
+        	$(this).addClass("versSelected");
+        });
+        
+        $(document).keydown(function(e){
+             if(e.wich || e.keyCode == 37){
+                   var vers= $("#resultadoVers p.versSelected").prev();
+                   $("#resultadoVers p").removeClass("versSelected");
+                   vers.addClass("versSelected");
+             }
+             if(e.wich || e.keyCode == 39){
+                   var vers= $("#resultadoVers p.versSelected").next();
+                   $("#resultadoVers p").removeClass("versSelected");
+                   vers.addClass("versSelected");
+             }
+        });
+        
+        
 	    //modal
 	   $('#modalPainel').on('shown.bs.modal', function () {
 		  $('#modalPainel').trigger('focus')
@@ -170,38 +191,51 @@
     	
 	      // função do socket
 	      $(function () {
+	      	//principal
 	        var socket = io();
-	        $('p').click(function(){
+	        $('#resultadoVers p').click(function(){
 	        	 
 	         socket.emit('text message',$(this).text(), $("#nCap").text(), $("#resultadoBusca h1").text());
 	         //socket.emit('capitulo',$("#nCap").text());
-	        
 	          return false;
-
 	        });
-
-            $("#standby").click(function(){
-            	socket.emit('standby');
-            	return false;
-
-            });
-
 	        socket.on('text message', function(msg,cap,livro){
-	          //$('#messages').val('');
 	          $('#versiculo').html("<span class='wow animated fadeIn'>"+msg+"</span>");
 	          $('#monitor p').html("<span class='wow animated fadeIn'>"+cap+"</span>");
 	          $('#monitor h2').html("<span class='wow animated fadeIn'>"+livro+"</span>");
 
 	        }); 
+            
+            //standby
+	        $("#standby").click(function(){
+            	socket.emit('standby');
+            	return false;
 
-	        
+            });
             socket.on('standby', function(){
 	          //$('#messages').val('');
             	console.log("standby clicado");
 	          $('#versiculo').toggleClass("standby");
 	          standby();
 	        }); 
-
+           
+            //arrow
+             $(document).keydown(function(e){
+	             if(e.wich || e.keyCode == 37){
+	                   var msg= $("#resultadoVers p.versSelected").prev().text();
+	                   socket.emit('arrowLeft', msg);
+	             }
+	             if(e.wich || e.keyCode == 39){
+	                   var msg= $("#resultadoVers p.versSelected").next().text();
+	                   socket.emit('arrowRight', msg);
+	             }
+             });
+             socket.on('arrowLeft', function(msg){
+	          $('#versiculo').html("<span class='wow animated fadeIn'>"+msg+"</span>");
+	         }); 
+	         socket.on('arrowRight', function(msg){
+	          $('#versiculo').html("<span class='wow animated fadeIn'>"+msg+"</span>");
+	         }); 
 	      });
         
      });
