@@ -18,7 +18,7 @@ var knex = require('knex')({
 });
 
 /*
-var knex = require('knex')({
+var knexdev = require('knex')({
   client: 'mysql',
   connection: {
     host : 'localhost',
@@ -30,7 +30,9 @@ var knex = require('knex')({
     tableName: 'migrations'
   }
 });
+
 */
 
+
 // export the initialized knex object
-module.exports = knex;
+module.exports = knexdev;
